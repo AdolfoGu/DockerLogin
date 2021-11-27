@@ -33,7 +33,7 @@ router.get('/profile',isAuthenticated, (req, res, next) => {
   });
 
   router.get('/dashboard',isAuthenticated, async(req, res, next) => {
-    const products = await Product.find()
+    const products = await Product.find({Usuario: req.user.id})
     res.render('dashboard',{
       products
     });
@@ -46,6 +46,7 @@ router.get('/logout', (req, res, next) => {
 
 router.post('/add',isAuthenticated, async (req, res, next) => {
     const product = new Product (req.body);
+    product.Usuario = req.user.id;
     await product.save();
     res.redirect('dashboard');
 });
